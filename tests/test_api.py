@@ -15,7 +15,7 @@ def test_get_user_by_id():
     response = test_client.get("/users/1")
     assert response.status_code == 200
     data = response.json()
-    assert data.user_id == 1
+    assert data["user_id"] == 1
 
 
 def test_delete_user():
