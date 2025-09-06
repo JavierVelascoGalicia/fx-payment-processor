@@ -1,7 +1,11 @@
 from fastapi.testclient import TestClient
 from wallets_api.main import app
+from wallets_api.database import drop_all_tables, create_all_tables
+
+drop_all_tables()
 
 test_client = TestClient(app)
+create_all_tables()
 
 
 def test_create_user():
@@ -45,10 +49,8 @@ def test_withdraw_wallet():
     response = test_client.post("/wallets/1/withdraw",
                                 json={"currency": "MXN", "amount": 10})
     assert response.status_code == 200
-    
 
 
 def test_get_wallet_balances():
     response = test_client.get("/wallets/1/balances")
     assert response.status_code == 200
-    

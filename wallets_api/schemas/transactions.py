@@ -3,7 +3,7 @@
 from pydantic import BaseModel
 
 
-class Transaction(BaseModel):
+class TransactionRequest(BaseModel):
     currency: str
     amount: float
 

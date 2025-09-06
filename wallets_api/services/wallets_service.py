@@ -5,10 +5,11 @@ from fastapi import HTTPException
 
 from typing import Sequence
 from wallets_api.models.models import Wallet
-from wallets_api.schemas.transactions import Transaction, ConvertTransactionRequest
+from wallets_api.schemas.transactions import TransactionRequest, ConvertTransactionRequest
 from wallets_api.utils.utils import Utils
 from wallets_api.utils.enums import TransactionTypeEnum
 from wallets_api.schemas.wallet import CreateWalletRequest, CreateWalletResponse
+from wallets_api.services.transactions_service import TransactionService
 
 
 class WalletService:
@@ -42,7 +43,7 @@ class WalletService:
         return balance
 
     @staticmethod
-    async def fund_withdraw_wallet(user_id: str, body: Transaction, transaction_type: TransactionTypeEnum, session: Session) -> Transaction:
+    async def fund_withdraw_wallet(user_id: str, body: TransactionRequest, transaction_type: TransactionTypeEnum, session: Session) -> TransactionRequest:
         wallet = await WalletService.get_wallet_by_user_id_and_currency(user_id, body.currency, session)
         match transaction_type.name:
             case 'FUND':
@@ -52,16 +53,18 @@ class WalletService:
                     raise HTTPException(status_code=500, detail="No founds")
                 wallet.balance -= body.amount
 
+        await TransactionService.create_transaction(user_id, body, transaction_type, wallet.wallet_id, session)
+
         session.add(wallet)
         session.commit()
         session.refresh(wallet)
 
-        return Transaction(amount=wallet.balance, currency=wallet.currency)
+        return TransactionRequest(amount=wallet.balance, currency=wallet.currency)
     
     @staticmethod
     async def convert_balance(user_id: str, body: ConvertTransactionRequest, session: Session) -> dict:
-        await WalletService.fund_withdraw_wallet(user_id, Transaction(currency=body.from_currency, amount=body.amount), TransactionTypeEnum.WITHDRAW, session)
+        await WalletService.fund_withdraw_wallet(user_id, TransactionRequest(currency=body.from_currency, amount=body.amount), TransactionTypeEnum.WITHDRAW, session)
         converted_amount = await Utils.convert_currencies(currency_from=body.from_currency, currency_to=body.to_currency, amount=body.amount)
-        await WalletService.fund_withdraw_wallet(user_id, Transaction(currency=body.to_currency, amount=converted_amount), TransactionTypeEnum.FUND, session)
+        await WalletService.fund_withdraw_wallet(user_id, TransactionRequest(currency=body.to_currency, amount=converted_amount), TransactionTypeEnum.FUND, session)
         
         return await WalletService.get_balance(user_id, session)
