@@ -85,7 +85,4 @@ Insure data integrity for wallet:
 
     To ensure the integrity of the wallet balance while making fund, withdrawals and convertions so the service is using only one db connection to led the db lock the records for the session, but in case this has high volumetry, an optimistic lock with a pool of connections is a great idea. Also can implement a pesimistic lock at row level in postgresql but sometimes impact the service performance when deadlocks happen.
 
-The reconciliationCheks:
-
-    The reconciliation Checks happend each five transactions so each time we reach the transaction count to 5 we run the reconcialition check with the last 5 transactions and verify the balaance.
 
