@@ -21,4 +21,4 @@ class Utils:
             case "USD":
                 return amount / CurrencyEnum[currency_to].value
             case _:
-                return amount * CurrencyEnum[currency_to].value
+                return amount * CurrencyEnum[currency_from].value

@@ -44,6 +44,6 @@ async def convert_currencies(user_id: str, body: ConvertTransactionRequest, sess
     return await WalletService.convert_balance(user_id, body, session)
 
 
-@wallet_controller.post("/{user_id}/transactions", response_model=List[Transaction])
+@wallet_controller.get("/{user_id}/transactions", response_model=List[Transaction])
 async def get_transactions_by_user(user_id: str, session: Session = Depends(get_db_session)):
     return await TransactionService.get_all_transactions_by_user_id(user_id, session)

@@ -44,6 +44,15 @@ def test_convert_wallet():
     assert data["USD"] == 0
     assert round(data["MXN"], 2) == 18867.92
 
+    
+def test_convert_wallet_to_usd():
+    response = test_client.post("/wallets/1/convert",
+                                json={"from_currency": "MXN", "to_currency": "USD", "amount": 1000})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["USD"] == 53
+    assert round(data["MXN"], 2) == 17867.92
+
 
 def test_withdraw_wallet():
     response = test_client.post("/wallets/1/withdraw",
@@ -54,3 +63,9 @@ def test_withdraw_wallet():
 def test_get_wallet_balances():
     response = test_client.get("/wallets/1/balances")
     assert response.status_code == 200
+
+    
+def test_get_wallet_transactions():
+    response = test_client.get("/wallets/1/transactions")
+    assert response.status_code == 200
+
