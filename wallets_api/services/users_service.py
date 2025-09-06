@@ -7,6 +7,7 @@ from wallets_api.models.models import User
 
 from sqlmodel import Session
 
+
 class UserService:
 
     @staticmethod
@@ -18,19 +19,17 @@ class UserService:
         return UserResponse(**user.model_dump())
 
     @staticmethod
-    async def get_user_by_id(user_id: str, session: Session) -> UserResponse:
+    async def get_user_by_id(user_id: str, session: Session) -> User:
         user = session.get(User, user_id)
         await Utils.validate_response(user)
         await Utils.validate_deleted(user)
 
-        return UserResponse(**user.model_dump())
+        return user
 
     @staticmethod
     async def delete_user(user_id: str, session: Session) -> GenericResponse:
         # Soft delete
-        user = session.get(User, user_id)
-        await Utils.validate_response(user)
-        await Utils.validate_deleted(user)
+        user = await UserService.get_user_by_id(user_id, session)
 
         user.is_deleted = True
         session.add(user)

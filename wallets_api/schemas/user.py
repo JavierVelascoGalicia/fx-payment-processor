@@ -9,5 +9,5 @@ class UserRequest(BaseModel):
     user_id: Optional[int] = None
 
 
-class UserResponse(UserRequest, BaseModel):
+class UserResponse(UserRequest):
     created_at: datetime
