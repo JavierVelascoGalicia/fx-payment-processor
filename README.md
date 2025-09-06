@@ -19,12 +19,6 @@ This project utilizes a rest API architecture composed of the following key comp
 
 ![alt text](./public/image.png)
 
-```mermaid
-graph TD
-users -->|Communicates with| wallets
-users -->|Stores data in|  postgresql.paymentProcessor.users
-wallets -->|Stores data in|  postgresql.paymentProcessor.wallets and postgresql.paymentProcessor.transactions
-```
 ### DB Design
 ![alt text](./public/image-1.png)
 ### API Desing
