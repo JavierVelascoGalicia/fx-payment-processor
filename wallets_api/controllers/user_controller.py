@@ -5,6 +5,7 @@ from wallets_api.database import get_db_session
 from wallets_api.schemas.user import UserRequest, UserResponse
 from wallets_api.schemas.generic import GenericResponse
 from wallets_api.services.users_service import UserService
+from wallets_api.utils.utils import Utils
 
 
 user_controller = APIRouter(prefix="/users", tags=["users"])

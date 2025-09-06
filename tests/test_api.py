@@ -18,6 +18,16 @@ def test_get_user_by_id():
     assert data["user_id"] == 1
 
 
+def test_get_user_by_id_error():
+    response = test_client.get("/users/2000000")
+    assert response.status_code == 404
+
+
 def test_delete_user():
     response = test_client.delete("/users/1")
     assert response.status_code == 200
+
+
+def test_user_deleted():
+    response = test_client.get("/users/1")
+    assert response.status_code == 500

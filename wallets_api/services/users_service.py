@@ -22,17 +22,19 @@ class UserService:
     @staticmethod
     async def get_user_by_id(user_id: str, session: Session) -> UserResponse:
         user = session.get(User, user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+        await Utils.validate_response(user)
+        await Utils.validate_deleted(user)
+
         return UserResponse(**user.model_dump())
 
     @staticmethod
     async def delete_user(user_id: str, session: Session) -> GenericResponse:
         # Soft delete
         user = session.get(User, user_id)
-
+        await Utils.validate_response(user)
         await Utils.validate_deleted(user)
-
+        
+        user.is_deleted = True
         session.add(user)
         session.commit()
         return GenericResponse(status="OK", detail="User deleted")
