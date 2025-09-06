@@ -3,8 +3,6 @@ from wallets_api.schemas.user import UserRequest, UserResponse
 from wallets_api.schemas.generic import GenericResponse
 from wallets_api.utils.utils import Utils
 
-from fastapi import HTTPException
-
 from wallets_api.models.models import User
 
 from sqlmodel import Session
@@ -33,7 +31,7 @@ class UserService:
         user = session.get(User, user_id)
         await Utils.validate_response(user)
         await Utils.validate_deleted(user)
-        
+
         user.is_deleted = True
         session.add(user)
         session.commit()
