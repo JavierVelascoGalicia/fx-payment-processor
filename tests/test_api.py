@@ -40,7 +40,7 @@ def test_create_wallet():
     data = response.json()
     assert data["user_id"] == 1
     assert data["balance"] == 0
-    assert data["currency"] == "USD"
+    assert data["currency"] == "MXN"
 
 
 def test_get_wallets_by_id_after_update():

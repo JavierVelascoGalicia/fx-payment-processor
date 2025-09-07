@@ -4,6 +4,7 @@ from wallets_api.schemas.generic import GenericResponse
 from wallets_api.utils.utils import Utils
 
 from wallets_api.models.models import User
+from wallets_api.services.wallets_service import WalletService
 
 from sqlmodel import Session
 
@@ -15,6 +16,7 @@ class UserService:
         user = User(user_id=user.user_id)
         session.add(user)
         session.commit()
+        await WalletService.create_wallet(str(user.user_id), "USD", session)
         session.refresh(user)
         return UserResponse(**user.model_dump())
 
