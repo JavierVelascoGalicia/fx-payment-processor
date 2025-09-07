@@ -36,6 +36,10 @@ class WalletService:
     @staticmethod
     async def get_balance(user_id: str, session: Session) -> dict:
         wallets = await WalletService.get_wallets_by_user_id(user_id, session)
+
+        if not wallets:
+            raise HTTPException(status_code=404, detail="No wallets")
+
         balance = {}
         for wallet in wallets:
             balance[wallet.currency] = wallet.balance
@@ -50,7 +54,7 @@ class WalletService:
                 wallet.balance += body.amount
             case 'WITHDRAW':
                 if wallet.balance < body.amount:
-                    raise HTTPException(status_code=500, detail="No founds")
+                    raise HTTPException(status_code=500, detail="No funds")
                 wallet.balance -= body.amount
 
         await TransactionService.create_transaction(user_id, body, transaction_type, wallet.wallet_id, session)

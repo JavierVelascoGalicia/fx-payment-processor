@@ -18,7 +18,7 @@ async def get_wallets_by_user_id(user_id: str, session: Session = Depends(get_db
     return await WalletService.get_wallets_by_user_id(user_id, session)
 
 
-@wallet_controller.post("/{user_id}", response_model=Wallet)
+@wallet_controller.post("/{user_id}", response_model=Wallet, status_code=201)
 async def create_wallet(user_id: str, body: CreateWalletRequest, session: Session = Depends(get_db_session)):
     return await WalletService.get_wallet_by_user_id_and_currency(user_id, body.currency, session)
 
