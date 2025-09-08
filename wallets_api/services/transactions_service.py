@@ -3,6 +3,7 @@ from sqlmodel import Session, select
 from wallets_api.utils.enums import TransactionTypeEnum
 from wallets_api.models.models import Transaction
 from wallets_api.schemas.transactions import TransactionRequest
+from wallets_api.utils.utils import Utils
 
 
 class TransactionService:

@@ -14,12 +14,11 @@ class User(SQLModel, table=True):
         sa_column=Column(pg.TIMESTAMP, default=datetime.now())
         )
     wallets: List["Wallet"] = Relationship(
-        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+        back_populates="user", sa_relationship_kwargs={"lazy": "noload"}
         )
-    is_deleted: Optional[bool] = Field(default=False)
-
+    deleted_at: Optional[datetime] = Field(sa_column=Column(pg.TIMESTAMP, default=None))
     transactions: List["Transaction"] = Relationship(
-        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+        back_populates="user", sa_relationship_kwargs={"lazy": "noload"}
     )
 
 
@@ -34,7 +33,7 @@ class Wallet(SQLModel, table=True):
     updated_at: Optional[datetime] = Field(sa_column=Column(pg.TIMESTAMP, default=datetime.now()))
 
     user: Optional[User] = Relationship(back_populates="wallets")
-    transactions: List["Transaction"] = Relationship(back_populates="wallet", sa_relationship_kwargs={"lazy": "selectin"})
+    transactions: List["Transaction"] = Relationship(back_populates="wallet", sa_relationship_kwargs={"lazy": "noload"})
 
 
 class Transaction(SQLModel, table=True):
@@ -48,5 +47,5 @@ class Transaction(SQLModel, table=True):
     transaction_type: int = Field(default=None)
     transaction_date: Optional[datetime] = Field(sa_column=Column(pg.TIMESTAMP, default=datetime.now()))
 
-    wallet: Optional[Wallet] = Relationship(back_populates="transactions")
-    user: Optional[User] = Relationship(back_populates="transactions")
+    wallet: Optional[Wallet] = Relationship(back_populates="transactions", sa_relationship_kwargs={"lazy": "noload"})
+    user: Optional[User] = Relationship(back_populates="transactions", sa_relationship_kwargs={"lazy": "noload"})

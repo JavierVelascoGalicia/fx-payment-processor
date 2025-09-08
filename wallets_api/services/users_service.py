@@ -4,9 +4,10 @@ from wallets_api.schemas.generic import GenericResponse
 from wallets_api.utils.utils import Utils
 
 from wallets_api.models.models import User
-from wallets_api.services.wallets_service import WalletService
+from wallets_api.models.models import Wallet
 
 from sqlmodel import Session
+from datetime import datetime
 
 
 class UserService:
@@ -14,9 +15,11 @@ class UserService:
     @staticmethod
     async def create_user(user: UserRequest, session: Session) -> UserResponse:
         user = User(user_id=user.user_id)
+        wallet = Wallet(user_id=user.user_id, currency="USD")
         session.add(user)
+        session.add(wallet)
         session.commit()
-        await WalletService.create_wallet(str(user.user_id), "USD", session)
+
         session.refresh(user)
         return UserResponse(**user.model_dump())
 
@@ -33,7 +36,7 @@ class UserService:
         # Soft delete
         user = await UserService.get_user_by_id(user_id, session)
 
-        user.is_deleted = True
+        user.deleted_at = datetime.now()
         session.add(user)
         session.commit()
         return GenericResponse(status="OK", detail="User deleted")

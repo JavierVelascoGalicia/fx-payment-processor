@@ -12,8 +12,8 @@ class Utils:
 
     @staticmethod
     async def validate_deleted(object):
-        if object.is_deleted:
-            raise HTTPException(status_code=500, detail="User already deleted")
+        if object.deleted_at:
+            raise HTTPException(status_code=404, detail="Resource deleted")
 
     @staticmethod
     async def convert_currencies(currency_from: str, currency_to: str, amount: float):

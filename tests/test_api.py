@@ -108,19 +108,20 @@ def test_delete_user():
     response = test_client.delete("/users/1")
     assert response.status_code == 200
     data = response.json()
-    assert data["status"] == "Ok"
-    assert data["detail"] == "Resource deleted"
+    assert data["status"] == "OK"
+    assert data["detail"] == "User deleted"
 
 
 def test_get_user_deleted():
     response = test_client.get("/users/1")
-    assert response.status_code == 400
+    assert response.status_code == 404
     data = response.json()
-    assert data["error"] == "User deleted"
+    assert data["detail"] == "Resource deleted"
 
 
 def test_get_wallet_by_deleted_user():
     response = test_client.get("/wallets/1")
-    assert response == 400
+    assert response.status_code == 404
     data = response.json()
-    assert data["error"] == "User deleted"
+    assert data["detail"] == "Resource deleted"
+
