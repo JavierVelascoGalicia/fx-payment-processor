@@ -8,7 +8,6 @@ from wallets_api.models.models import Wallet
 from wallets_api.schemas.transactions import TransactionRequest, ConvertTransactionRequest
 from wallets_api.utils.utils import Utils
 from wallets_api.utils.enums import TransactionTypeEnum
-from wallets_api.schemas.wallet import CreateWalletRequest
 from wallets_api.services.transactions_service import TransactionService
 from wallets_api.services.users_service import UserService
 

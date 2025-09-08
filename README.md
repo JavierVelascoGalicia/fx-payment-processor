@@ -53,7 +53,7 @@ For this simplified paymentProcessor we are taking the fallowing assumptions:
 
 The system needs a user:
 
-    The reason of taking this asumption is that in the prooblem description describe that the /wallets api gets the information based on the user_id, wee can use the wallet_id as user_id but to make it a litle bit more real, we create a user and a controller to create and delete users.
+    The reason of taking this asumption is that in the prooblem description describe that the /wallets api gets the information based on the user_id, wee can use the wallet_id as user_id but, to make it a litle bit more real we create a user and a controller to create and delete users.
 
 Each users needs a wallet to start with:
 
@@ -77,6 +77,6 @@ This service was write async:
 
 Insure data integrity for wallet:
 
-    To ensure the integrity of the wallet balance while making fund, withdrawals and convertions so the service is using only one db connection to led the db lock the records for the session, but in case this has high volumetry, an optimistic lock with a pool of connections is a great idea. Also can implement a pesimistic lock at row level in postgresql but sometimes impact the service performance when deadlocks happen.
+    To ensure the integrity of the wallet balance while making fund, withdrawals and convertions so the service is using only one db connection to led the db lock the records for the session, but in case this has high volumetry, an optimistic lock with a pool of connections is a great idea.
 
-
+Insure data percistence with soft delete for audit purposes.
