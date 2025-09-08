@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
     created_at TIMESTAMPTZ DEFAULT NOW(), 
-    created_at TIMESTAMPTZ DEFAULT NOW());
-
+    deleted_at TIMESTAMPTZ DEFAULT NOW());
+    
 CREATE TABLE IF NOT EXISTS wallets (
     wallet_id SERIAL PRIMARY KEY,
     user_id INT,
